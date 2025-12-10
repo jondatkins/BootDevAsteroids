@@ -9,6 +9,9 @@ class Asteroid(CircleShape):
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius)
         self.rotation = 0
+        self.explosion = pygame.mixer.Sound(
+            "./Sounds/mixkit-arcade-game-explosion-1699.wav"
+        )
 
     def draw(self, screen):
         pygame.draw.circle(screen, "white", self.position, self.radius, LINE_WIDTH)
@@ -34,6 +37,7 @@ class Asteroid(CircleShape):
     def split(self):
         self.kill()
         if self.radius <= ASTEROID_MIN_RADIUS:
+            self.explosion.play()
             return
         log_event("asteroid_split")
         random_angle = random.uniform(20, 50)
@@ -42,6 +46,6 @@ class Asteroid(CircleShape):
         new_radius = self.radius - ASTEROID_MIN_RADIUS
         asteroid_one = Asteroid(self.position.x, self.position.y, new_radius)
         asteroid_two = Asteroid(self.position.x, self.position.y, new_radius)
-        print(f"new_vector_one is {new_vector_one}")
         asteroid_one.velocity = new_vector_one * 1.2
         asteroid_two.velocity = new_vector_two * 1.2
+        self.explosion.play()

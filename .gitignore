@@ -9,3 +9,7 @@ game_state.jsonl
 game_events.jsonl
 # Virtual environments
 .venv
+asteroids_notes.md
+notes.md
+todo.md
+Sounds/
