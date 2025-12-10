@@ -35,3 +35,13 @@ class CircleShape(pygame.sprite.Sprite):
     def update(self, dt):
         # must override
         pass
+
+    def clamp_to_rect(self, rect):
+        # Clamp center so the circle never crosses boundary
+        self.position.x = max(
+            rect.left + self.radius, min(self.position.x, rect.right - self.radius)
+        )
+        self.position.y = max(
+            rect.top + self.radius, min(self.position.y, rect.bottom - self.radius)
+        )
+        # print(f"{self.radius}")

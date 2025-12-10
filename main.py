@@ -11,11 +11,34 @@ from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
+from constants import GAME_RECT_WIDTH
+from constants import GAME_RECT_HEIGHT
+from constants import GAME_RECT_WIDTH_OFFSET
+from constants import GAME_RECT_HEIGHT_OFFSET
 
 
 def show_score(x, y, screen, font, score):
     score = font.render(f"Score : {999}", True, (255, 255, 255))
     screen.blit(score, (400, 400))
+
+
+# Draws a border inside the pygame window.
+def draw_game_border(screen, width, height):
+    colour = (255, 0, 0)
+    # width_offset = 200
+    # height_offset = 200
+    game_box_width = width - GAME_RECT_WIDTH_OFFSET
+    game_box_height = height - GAME_RECT_HEIGHT_OFFSET
+    x_pos = GAME_RECT_WIDTH_OFFSET // 2
+    y_pos = GAME_RECT_HEIGHT_OFFSET // 2
+    game_rect = pygame.Rect(x_pos, y_pos, game_box_width, game_box_height)
+    pygame.draw.rect(
+        screen,
+        colour,
+        game_rect,
+        4,
+    )
+    return game_rect
 
 
 def main():
@@ -24,9 +47,9 @@ def main():
     pygame.display.set_caption("AsteroidsGame")
     screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
     # make_hyprland_window_float(constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT)
-    make_hyprland_window_float_2(
-        "AsteroidsGame", constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT
-    )
+    # make_hyprland_window_float_2(
+    #     "AsteroidsGame", constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT
+    # )
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
@@ -36,7 +59,10 @@ def main():
     AsteroidField.containers = (updatable,)
     Shot.containers = (shots, updatable, drawable)
     player = Player(constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2)
-    asteroid_field = AsteroidField()
+
+    asteroid_field = AsteroidField(
+        draw_game_border(screen, constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT)
+    )
     clock = pygame.time.Clock()
     dt = 0
     # font = pygame.font.Font("freesansbold.ttf", 32)
@@ -45,8 +71,7 @@ def main():
     game_over = False
     running = True
 
-    w, h = pygame.display.get_surface().get_size()
-    print(f"widt: {w} height: {h}")
+    # print(f"widt: {w} height: {h}")
     while running:
         log_state()
         font = pygame.font.Font(None, 36)
@@ -56,14 +81,9 @@ def main():
                 running = False
 
         screen.fill("black")
+        w, h = pygame.display.get_surface().get_size()
+        draw_game_border(screen, w, h)
 
-        colour = (255, 0, 0)
-        pygame.draw.rect(
-            screen,
-            colour,
-            pygame.Rect(0, 0, constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT),
-            4,
-        )
         if not game_over:
             for sprite in drawable:
                 sprite.draw(screen)

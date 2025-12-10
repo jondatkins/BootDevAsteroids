@@ -6,18 +6,21 @@ from logger import log_event
 
 
 class Asteroid(CircleShape):
-    def __init__(self, x, y, radius):
+    def __init__(self, x, y, radius, game_rect):
         super().__init__(x, y, radius)
         self.rotation = 0
         self.explosion = pygame.mixer.Sound(
             "./Sounds/mixkit-arcade-game-explosion-1699.wav"
         )
+        self.game_rect = game_rect
+        self.clamp_to_rect(self.game_rect)
 
     def draw(self, screen):
         pygame.draw.circle(screen, "white", self.position, self.radius, LINE_WIDTH)
 
     def update(self, dt):
         self.position += self.velocity * dt
+        self.clamp_to_rect(self.game_rect)
 
     def rotate(self, rot):
         self.rotation += rot
@@ -44,8 +47,12 @@ class Asteroid(CircleShape):
         new_vector_one = self.velocity.rotate(random_angle)
         new_vector_two = self.velocity.rotate(-random_angle)
         new_radius = self.radius - ASTEROID_MIN_RADIUS
-        asteroid_one = Asteroid(self.position.x, self.position.y, new_radius)
-        asteroid_two = Asteroid(self.position.x, self.position.y, new_radius)
+        asteroid_one = Asteroid(
+            self.position.x, self.position.y, new_radius, self.game_rect
+        )
+        asteroid_two = Asteroid(
+            self.position.x, self.position.y, new_radius, self.game_rect
+        )
         asteroid_one.velocity = new_vector_one * 1.2
         asteroid_two.velocity = new_vector_two * 1.2
         self.explosion.play()
