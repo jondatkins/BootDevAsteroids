@@ -33,6 +33,9 @@ class Player(CircleShape):
         # self.is_invincible = False
         self.is_drawn = True
 
+    def set_game_rect(self, game_rect):
+        self.game_rect = game_rect
+
     def draw(self, screen):
         if self.draw_cooldown > 0:
             return
@@ -83,6 +86,7 @@ class Player(CircleShape):
             self.move(-dt)
         if keys[pygame.K_SPACE]:
             self.shoot()
+        self.wrap_movement((self.game_rect))
 
     def move(self, dt):
         unit_vector = pygame.Vector2(0, 1)

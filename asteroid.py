@@ -20,7 +20,8 @@ class Asteroid(CircleShape):
 
     def update(self, dt):
         self.position += self.velocity * dt
-        self.clamp_to_rect(self.game_rect)
+        # self.clamp_to_rect(self.game_rect)
+        self.wrap_movement(self.game_rect)
 
     def rotate(self, rot):
         self.rotation += rot

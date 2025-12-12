@@ -44,4 +44,13 @@ class CircleShape(pygame.sprite.Sprite):
         self.position.y = max(
             rect.top + self.radius, min(self.position.y, rect.bottom - self.radius)
         )
-        # print(f"{self.radius}")
+
+    def wrap_movement(self, rect):
+        if self.position.x - self.radius > rect.right:
+            self.position.x = rect.left
+        if self.position.x + self.radius < rect.left:
+            self.position.x = rect.right
+        if self.position.y - self.radius > rect.bottom:
+            self.position.y = rect.top
+        if self.position.y + self.radius < rect.top:
+            self.position.y = rect.bottom

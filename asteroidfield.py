@@ -6,11 +6,15 @@ from constants import *
 
 
 class AsteroidField(pygame.sprite.Sprite):
-    def __init__(self, game_rect):
+    def __init__(self):
         pygame.sprite.Sprite.__init__(self, self.containers)
         self.spawn_timer = 0.0
-        self.game_rect = game_rect
         self.asteroids = []
+
+    # sets up a rectangle in side the pygame window surface, so I can see
+    # where the asteroids are spawing and dynamically resize the game area
+    def set_game_rect(self, game_rect):
+        self.game_rect = game_rect
         self.edges = [
             [
                 pygame.Vector2(1, 0),  # from left edge moving right
@@ -51,13 +55,13 @@ class AsteroidField(pygame.sprite.Sprite):
         self.spawn_timer += dt
         if (
             self.spawn_timer > ASTEROID_SPAWN_RATE_SECONDS
-            and len(self.asteroids) <= MAX_NUM_ASTEROIDS
+            and len(self.asteroids) < MAX_NUM_ASTEROIDS
         ):
             self.spawn_timer = 0
 
             # spawn a new asteroid at a random edge
-            # edge = random.choice(self.edges)
-            edge = self.edges[2]
+            edge = random.choice(self.edges)
+            # edge = self.edges[3]
             speed = random.randint(40, 100)
             velocity = edge[0] * speed
             velocity = velocity.rotate(random.randint(-30, 30))

@@ -61,7 +61,7 @@ def main():
     player = Player(constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2)
 
     asteroid_field = AsteroidField(
-        draw_game_border(screen, constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT)
+        # draw_game_border(screen, constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT)
     )
     clock = pygame.time.Clock()
     dt = 0
@@ -82,8 +82,9 @@ def main():
 
         screen.fill("black")
         w, h = pygame.display.get_surface().get_size()
-        draw_game_border(screen, w, h)
-
+        game_rect = draw_game_border(screen, w, h)
+        asteroid_field.set_game_rect(game_rect)
+        player.set_game_rect(game_rect)
         if not game_over:
             for sprite in drawable:
                 sprite.draw(screen)
